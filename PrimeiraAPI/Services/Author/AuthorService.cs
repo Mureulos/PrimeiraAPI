@@ -11,9 +11,31 @@ namespace PrimeiraAPI.Services.Author
         {
             _context = context;
         }
-        public Task<ResponseModel<AuthorModel>> GetAuthorByBookId(int bookId)
+        public async Task<ResponseModel<AuthorModel>> GetAuthorByBookId(int idBook)
         {
-            throw new NotImplementedException();
+            ResponseModel<AuthorModel> response = new ResponseModel<AuthorModel>();
+
+            try
+            {
+                var book = await _context.Books
+                    .Include(a => a.Author)
+                    .FirstOrDefaultAsync(bookBase => bookBase.Id == idBook);
+
+                if (book == null) {
+                    response.Message = "No records found";
+                    return response;
+                }
+
+                response.Data = book.Author;
+                response.Message = "Authour found!";
+                return response;
+            }
+            catch (Exception ex) 
+            {
+                response.Message = ex.Message;
+                response.Status = false;
+                return response;
+            }
         }
 
         public async Task<ResponseModel<AuthorModel>> GetAuthorById(int idAuthor)

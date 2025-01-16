@@ -6,6 +6,6 @@ namespace PrimeiraAPI.Services.Author
     {
         Task<ResponseModel<List<AuthorModel>>> ListAuthors();
         Task<ResponseModel<AuthorModel>> GetAuthorById(int idAuthor);
-        Task<ResponseModel<AuthorModel>> GetAuthorByBookId(int bookId);
+        Task<ResponseModel<AuthorModel>> GetAuthorByBookId(int idBook);
     }
 }

@@ -29,5 +29,12 @@ namespace PrimeiraAPI.Controllers
             var author = await _authorInterface.GetAuthorById(idAuthor);
             return Ok(author);
         }
+
+        [HttpGet("GetAuthorByBookId/{idBook}")]
+        public async Task<ActionResult<ResponseModel<AuthorModel>>> GetAuthorByBookId(int idBook)
+        {
+            var author = await _authorInterface.GetAuthorByBookId(idBook);
+            return Ok(author);
+        }
     }
 }
