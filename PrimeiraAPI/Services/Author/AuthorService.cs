@@ -16,9 +16,30 @@ namespace PrimeiraAPI.Services.Author
             throw new NotImplementedException();
         }
 
-        public Task<ResponseModel<AuthorModel>> GetAuthorById(int idAuthor)
+        public async Task<ResponseModel<AuthorModel>> GetAuthorById(int idAuthor)
         {
-            throw new NotImplementedException();
+            ResponseModel<AuthorModel> response = new ResponseModel<AuthorModel>();
+
+            try
+            {
+                var author = await _context.Authors.FirstOrDefaultAsync(authorBase => authorBase.Id == idAuthor);
+
+                if (author == null) 
+                {
+                    response.Message = "No records found!";
+                    return response;
+                }
+
+                response.Data = author;
+                response.Message = "Author found!";
+                return response;
+            }
+            catch (Exception ex) 
+            {
+                response.Message = ex.Message;
+                response.Status = false;
+                return response;
+            }
         }
 
         public async Task<ResponseModel<List<AuthorModel>>> ListAuthors()
