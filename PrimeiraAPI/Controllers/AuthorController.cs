@@ -39,9 +39,23 @@ namespace PrimeiraAPI.Controllers
         }
 
         [HttpPost("CreateAuthor")]
-        public async Task<ActionResult<ResponseModel<AuthorModel>>> CreateAuthor(AuthorCreationDto authorCreationDto) 
+        public async Task<ActionResult<ResponseModel<List<AuthorModel>>>> CreateAuthor(AuthorCreationDto authorCreationDto) 
         {
             var author = await _authorInterface.CreateAuthor(authorCreationDto);
+            return Ok(author);
+        }
+
+        [HttpPut("UpdateAuthor")]
+        public async Task<ActionResult<ResponseModel<List<AuthorModel>>>> UpdateAuthor(AuthorEditionDto authorEditionDto)
+        {
+            var author = await _authorInterface.UpdateAuthor(authorEditionDto);
+            return Ok(author);
+        }
+
+        [HttpDelete("DeleteAuthor")]
+        public async Task<ActionResult<ResponseModel<List<AuthorModel>>>> DeleteAuthor(int idAuthor)
+        {
+            var author = await _authorInterface.DeleteAuthor(idAuthor);
             return Ok(author);
         }
     }

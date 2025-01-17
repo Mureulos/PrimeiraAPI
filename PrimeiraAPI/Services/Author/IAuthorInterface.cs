@@ -9,5 +9,8 @@ namespace PrimeiraAPI.Services.Author
         Task<ResponseModel<AuthorModel>> GetAuthorById(int idAuthor);
         Task<ResponseModel<AuthorModel>> GetAuthorByBookId(int idBook);
         Task<ResponseModel<List<AuthorModel>>> CreateAuthor(AuthorCreationDto authorCriacaoDto);
+        Task<ResponseModel<List<AuthorModel>>> UpdateAuthor(AuthorEditionDto authorEditionDto);
+        Task<ResponseModel<List<AuthorModel>>> DeleteAuthor(int idAuthor);
+
     }
 }

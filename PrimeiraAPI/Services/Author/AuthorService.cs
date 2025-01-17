@@ -1,4 +1,5 @@
 ﻿using Azure;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.EntityFrameworkCore;
 using PrimeiraAPI.Data;
 using PrimeiraAPI.Dto.Author;
@@ -87,7 +88,7 @@ namespace PrimeiraAPI.Services.Author
             }
         }
 
-        public async Task<ResponseModel<List<AuthorModel>>> CreateAuthor(AuthorCreationDto authorCriacaoDto)
+        public async Task<ResponseModel<List<AuthorModel>>> CreateAuthor(AuthorCreationDto authorCreationDto)
         {
             ResponseModel<List<AuthorModel>> response = new ResponseModel<List<AuthorModel>>();
 
@@ -95,8 +96,8 @@ namespace PrimeiraAPI.Services.Author
             {
                 var author = new AuthorModel()
                 {
-                    Name = authorCriacaoDto.Name,
-                    LastName = authorCriacaoDto.LastName,
+                    Name = authorCreationDto.Name,
+                    LastName = authorCreationDto.LastName,
                 };
 
                 _context.Add(author);
@@ -110,6 +111,67 @@ namespace PrimeiraAPI.Services.Author
             catch (Exception ex)
             {
                 response.Message = "Can't create a author";
+                response.Status = false;
+                return response;
+            }
+        }
+
+        public async Task<ResponseModel<List<AuthorModel>>> UpdateAuthor(AuthorEditionDto authorEditionDto)
+        {
+            ResponseModel<List<AuthorModel>> response = new ResponseModel<List<AuthorModel>>();
+
+            try
+            {
+                var author = await _context.Authors.FirstOrDefaultAsync(authorBase => authorBase.Id == authorEditionDto.Id);
+
+                if (author == null)
+                {
+                    response.Message = "Author not found";
+                    return response;
+                }
+
+                author.Name = authorEditionDto.Name;
+                author.LastName = authorEditionDto.LastName;
+
+                _context.Update(author);
+                await _context.SaveChangesAsync();
+
+                response.Data = await _context.Authors.ToListAsync();
+                response.Message = "Author updated with successfully";
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Message = "Can't create a author";
+                response.Status = false;
+                return response;
+            }
+        }
+
+        public async Task<ResponseModel<List<AuthorModel>>> DeleteAuthor(int idAuthor)
+        {
+            ResponseModel<List<AuthorModel>> response = new ResponseModel<List<AuthorModel>>();
+
+            try
+            {
+                var author = await _context.Authors.FirstOrDefaultAsync(authorBase => authorBase.Id == idAuthor);
+
+                if (author == null)
+                {
+                    response.Message = "Author not found!";
+                    return response;
+                }
+
+                _context.Remove(author);
+                await _context.SaveChangesAsync();
+
+                response.Data = await _context.Authors.ToListAsync();
+                response.Message = "Author deleted with successafully!";
+                return response;
+
+            } catch (Exception ex) 
+            {
+                response.Message = ex.Message;
                 response.Status = false;
                 return response;
             }
