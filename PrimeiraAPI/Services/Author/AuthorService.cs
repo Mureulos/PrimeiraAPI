@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Azure;
+using Microsoft.EntityFrameworkCore;
 using PrimeiraAPI.Data;
+using PrimeiraAPI.Dto.Author;
 using PrimeiraAPI.Models;
 
 namespace PrimeiraAPI.Services.Author
@@ -7,10 +9,12 @@ namespace PrimeiraAPI.Services.Author
     public class AuthorService : IAuthorInterface
     {
         private readonly AppDbContext _context;
+
         public AuthorService(AppDbContext context) 
         {
             _context = context;
         }
+
         public async Task<ResponseModel<AuthorModel>> GetAuthorByBookId(int idBook)
         {
             ResponseModel<AuthorModel> response = new ResponseModel<AuthorModel>();
@@ -78,6 +82,34 @@ namespace PrimeiraAPI.Services.Author
             catch (Exception err)
             {
                 response.Message  = err.Message;
+                response.Status = false;
+                return response;
+            }
+        }
+
+        public async Task<ResponseModel<List<AuthorModel>>> CreateAuthor(AuthorCreationDto authorCriacaoDto)
+        {
+            ResponseModel<List<AuthorModel>> response = new ResponseModel<List<AuthorModel>>();
+
+            try
+            {
+                var author = new AuthorModel()
+                {
+                    Name = authorCriacaoDto.Name,
+                    LastName = authorCriacaoDto.LastName,
+                };
+
+                _context.Add(author);
+                await _context.SaveChangesAsync();
+
+                response.Data = await _context.Authors.ToListAsync();
+                response.Message = "Author's creation was successfully completed";
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Message = "Can't create a author";
                 response.Status = false;
                 return response;
             }

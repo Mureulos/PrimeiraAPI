@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PrimeiraAPI.Dto.Author;
 using PrimeiraAPI.Models;
 using PrimeiraAPI.Services.Author;
 
@@ -34,6 +35,13 @@ namespace PrimeiraAPI.Controllers
         public async Task<ActionResult<ResponseModel<AuthorModel>>> GetAuthorByBookId(int idBook)
         {
             var author = await _authorInterface.GetAuthorByBookId(idBook);
+            return Ok(author);
+        }
+
+        [HttpPost("CreateAuthor")]
+        public async Task<ActionResult<ResponseModel<AuthorModel>>> CreateAuthor(AuthorCreationDto authorCreationDto) 
+        {
+            var author = await _authorInterface.CreateAuthor(authorCreationDto);
             return Ok(author);
         }
     }
