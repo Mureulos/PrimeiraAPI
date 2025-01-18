@@ -5,7 +5,7 @@ namespace PrimeiraAPI.Services.Author
 {
     public interface IAuthorInterface
     {
-        Task<ResponseModel<List<AuthorModel>>> ListAuthors();
+        Task<ResponseModel<List<AuthorModel>>> GetAuthors();
         Task<ResponseModel<AuthorModel>> GetAuthorById(int idAuthor);
         Task<ResponseModel<AuthorModel>> GetAuthorByBookId(int idBook);
         Task<ResponseModel<List<AuthorModel>>> CreateAuthor(AuthorCreationDto authorCriacaoDto);

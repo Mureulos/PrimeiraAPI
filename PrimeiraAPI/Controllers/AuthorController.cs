@@ -17,10 +17,10 @@ namespace PrimeiraAPI.Controllers
             _authorInterface = authorInterface;
         }
 
-        [HttpGet("ListAuthors")]
-        public async Task<ActionResult<ResponseModel<List<AuthorModel>>>> ListAuthors() 
+        [HttpGet("GetAuthors")]
+        public async Task<ActionResult<ResponseModel<List<AuthorModel>>>> GetAuthors() 
         {
-            var authors = await _authorInterface.ListAuthors();
+            var authors = await _authorInterface.GetAuthors();
             return Ok(authors);
         }
 
